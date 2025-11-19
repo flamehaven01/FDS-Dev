@@ -3,6 +3,21 @@ All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.0.2] - 2025-11-19
+### Added
+- MarkdownParser now extracts inline links (file, anchor, and external) so lint rules can reason about documentation references.
+- `BrokenLinkCheckRule` verifies anchors, relative files, and (optionally) external URLs, with new `.fdsrc.yaml` toggles for `enabled`, `check_external`, and timeout.
+- README (English/Korean) now documents the optional broken link audits, CLI commands (`fds lint`, `fds translate`), and the broader “code-level internationalization” positioning, plus a dual-language About section.
+
+### Changed
+- `LintRunner` supports `enabled: false` or `'off'` configurations so optional rules can be declared without running.
+- `.fdsrc.yaml` now documents how to configure the broken link rule without enabling it by default.
+- Internal reports (`DOCUMENTATION_COMPLETE.md`, `FIX_SUMMARY.md`, `PROJECT_COMPLETION_REPORT.md`, `README_UPDATE_SUMMARY.md`, `test_ko.md`) were removed from the repository and added to `.gitignore`.
+
+### Testing
+- Added parser coverage for link extraction and regression tests for the new BrokenLinkCheckRule (anchor, file, and external scenarios).
+- Mocked network calls in unit tests to keep the suite deterministic even when external checking is enabled.
+
 ## [0.0.1] - 2025-11-19
 ### Added
 - Initial `fds` CLI with the `lint` and `translate` commands, parallel lint execution, and persistent cache management via `.fds_cache.json`.

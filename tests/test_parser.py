@@ -67,6 +67,27 @@ def test_line_without_header(create_test_markdown_file):
     doc = parser.parse(file_path)
     assert len(doc.headers) == 0
 
+def test_parse_links(create_test_markdown_file):
+    content = (
+        "# Intro\n"
+        "See the [guide](docs/guide.md) for details.\n"
+        "Jump [here](#intro) within the document.\n"
+        "External [link](https://example.com/page).\n"
+    )
+    file_path = create_test_markdown_file(content)
+    parser = MarkdownParser()
+    doc = parser.parse(file_path)
+
+    assert len(doc.links) == 3
+    kinds = {link.kind for link in doc.links}
+    assert {"file", "anchor", "external"} == kinds
+    file_link = next(link for link in doc.links if link.kind == "file")
+    assert file_link.target == "docs/guide.md"
+    anchor_link = next(link for link in doc.links if link.kind == "anchor")
+    assert anchor_link.target == "#intro"
+    external_link = next(link for link in doc.links if link.kind == "external")
+    assert external_link.target == "https://example.com/page"
+
 def test_file_not_found():
     parser = MarkdownParser()
     with pytest.raises(FileNotFoundError):

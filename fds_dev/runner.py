@@ -3,12 +3,13 @@ import yaml
 from typing import List, Dict, Any, Tuple, Optional
 
 from fds_dev.parser import Document, MarkdownParser
-from fds_dev.rules import BaseRule, LintError, RequireSectionLicense, SectionOrder
+from fds_dev.rules import BaseRule, LintError, RequireSectionLicense, SectionOrder, BrokenLinkCheckRule
 
 # A mapping from rule names in the config to their class implementations.
 AVAILABLE_RULES = {
     "require-section-license": RequireSectionLicense,
     "section-order": SectionOrder,
+    "broken-link-check": BrokenLinkCheckRule,
 }
 
 def _get_file_hash(file_path: str) -> str:
@@ -33,13 +34,24 @@ class LintRunner:
         rules_config = self.config.get('rules', {})
         
         for name, config_value in rules_config.items():
-            if name in AVAILABLE_RULES:
-                if config_value == 'on':
-                    rule_instance = AVAILABLE_RULES[name]({})
-                    initialized_rules.append(rule_instance)
-                elif isinstance(config_value, dict):
-                    rule_instance = AVAILABLE_RULES[name](config_value)
-                    initialized_rules.append(rule_instance)
+            if name not in AVAILABLE_RULES:
+                continue
+
+            if config_value in ('off', False, None):
+                continue
+
+            if config_value in ('on', True):
+                rule_config = {}
+            elif isinstance(config_value, dict):
+                enabled = config_value.get('enabled', True)
+                if not enabled:
+                    continue
+                rule_config = {k: v for k, v in config_value.items() if k != 'enabled'}
+            else:
+                continue
+
+            rule_instance = AVAILABLE_RULES[name](rule_config)
+            initialized_rules.append(rule_instance)
         return initialized_rules
 
     def run(self, file_path: str, cache: Dict[str, Any]) -> Tuple[str, Optional[str], List[LintError]]:
