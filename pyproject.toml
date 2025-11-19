@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "A blazingly fast, structure-aware linter for your documentation, with built-in translation for non-native English speakers."
 readme = "README.md"
 requires-python = ">=3.9"
+license = {file = "LICENSE"}
 authors = [
     {name = "Flamehaven", email = "flamehaven01@users.noreply.github.com"}
 ]
@@ -31,6 +32,12 @@ dependencies = [
     "click>=8.0.0",
     "pyyaml>=6.0",
     "requests>=2.28.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "build>=1.0",
+    "pytest>=7.4",
 ]
 
 [project.urls]

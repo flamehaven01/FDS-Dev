@@ -52,6 +52,27 @@ fds translate README.ko.md --output README.md
 fds translate my_app/main.py --in-place
 ```
 
+## Deployment & Automation
+
+### Continuous Integration
+
+GitHub Actions automatically runs the test suite across Python 3.9–3.11 and builds release artifacts for every push and pull request targeting `main`. You can find the workflow definition in `.github/workflows/ci.yml`.
+
+### Automated PyPI Releases
+
+Tagging a commit with the `v*` pattern (for example, `v0.2.0`) triggers `.github/workflows/release.yml`, which builds the project with `python -m build` and publishes the result to PyPI using the `PYPI_API_TOKEN` secret.
+
+### Official Docker Image
+
+Ship the CLI as a container image by using the provided `Dockerfile`:
+
+```bash
+docker build -t fds-dev .
+docker run --rm fds-dev lint README.md
+```
+
+The image installs the package globally and exposes the `fds` entrypoint, so any CLI command can be run directly.
+
 ## Contributing
 
 FDS-Dev is in early development. Contributions are welcome!

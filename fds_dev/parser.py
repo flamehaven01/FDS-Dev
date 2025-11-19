@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
+from pathlib import Path
 import re
-from typing import List
+from typing import List, Union
 
 @dataclass
 class Header:
@@ -10,39 +11,45 @@ class Header:
 
 @dataclass
 class Document:
-    path: str
+    path: Union[str, Path]
     content: str
     lines: List[str] = field(init=False)
     headers: List[Header] = field(default_factory=list)
 
     def __post_init__(self):
         self.lines = self.content.splitlines()
+        if self.content == "":
+            self.lines = [""]
 
 class MarkdownParser:
     """
     A simple parser to extract structural elements from a Markdown file.
     """
     def __init__(self):
-        # Regex to find ATX-style headers (#, ##, etc.)
-        self.header_regex = re.compile(r"^(#{1,6})\s+(.*)")
+        # Regex to find ATX-style headers (#, ##, etc.) with optional leading spaces
+        self.header_regex = re.compile(r"^\s*(#{1,6})\s+(.*\S.*)$")
 
-    def parse(self, file_path: str) -> Document:
+    def parse(self, file_path: Union[str, Path]) -> Document:
         """
         Parses a Markdown file and returns a Document object.
         """
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        
-        doc = Document(path=file_path, content=content)
-        
+        path = Path(file_path)
+        content = path.read_text(encoding='utf-8')
+        return self.parse_content(content, path=path)
+
+    def parse_content(self, content: str, path: Union[str, Path] = "<memory>") -> Document:
+        """Parse Markdown content provided as a string."""
+        doc = Document(path=path, content=content)
+        self._extract_headers(doc)
+        return doc
+
+    def _extract_headers(self, doc: Document) -> None:
         for i, line in enumerate(doc.lines):
             header_match = self.header_regex.match(line)
             if header_match:
                 level = len(header_match.group(1))
                 text = header_match.group(2).strip()
                 doc.headers.append(Header(level=level, text=text, line_number=i + 1))
-        
-        return doc
 
 if __name__ == '__main__':
     # Example usage:
