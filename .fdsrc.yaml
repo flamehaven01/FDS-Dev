@@ -26,3 +26,9 @@ rules:
       - 'Usage'
       - 'Contributing'
       - 'License'
+
+  # Optional: Validate internal anchors and linked files.
+  broken-link-check:
+    enabled: false        # Set to true or 'on' to enable
+    check_external: false # External HTTP checks can slow lint runs
+    timeout: 3            # Seconds per request when external checks are enabled

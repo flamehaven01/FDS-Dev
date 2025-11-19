@@ -1,33 +1,12 @@
 import pytest
-from fds_dev.parser import Document
-from fds_dev.rules import RequireSectionLicense, SectionOrder
+import requests
 
-@pytest.fixture
-def create_doc():
-    """A pytest fixture to create a Document object for testing rules."""
-    def _create(content: str):
-        # Simplified parser logic for tests
-        doc = Document(path="test.md", content=content)
-        
-        from fds_dev.parser import MarkdownParser
-        parser = MarkdownParser()
-        # Re-parse to get headers correctly
-        return parser.parse(doc.path) if hasattr(doc, 'content') else doc
-    
-    # A bit of a hack to make the test fixture work with file content directly
-    def _create_from_content(content: str):
-        doc = Document(path="test.md", content=content)
-        # Manually parse headers for the test document
-        from fds_dev.parser import MarkdownParser
-        parser = MarkdownParser()
-        doc.headers = parser.parse_content(content).headers
-        return doc
-
-    def _create_from_content_with_manual_headers(content, headers):
-        doc = Document(path="test.md", content=content, headers=headers)
-        return doc
-        
-    return _create_from_content_with_manual_headers
+from fds_dev.parser import MarkdownParser
+from fds_dev.rules import (
+    RequireSectionLicense,
+    SectionOrder,
+    BrokenLinkCheckRule,
+)
 
 @pytest.fixture
 def create_doc_from_file(tmp_path):
@@ -132,3 +111,60 @@ def test_section_order_no_config(create_doc_from_file):
     doc = create_doc_from_file(content)
     errors = rule.apply(doc)
     assert len(errors) == 0, "Rule should do nothing if order is not configured"
+
+
+def test_broken_link_rule_detects_missing_anchor(tmp_path):
+    content = "# Intro\n\nSee [missing](#unknown)\n"
+    path = tmp_path / "doc.md"
+    path.write_text(content, encoding="utf-8")
+
+    doc = MarkdownParser().parse(path)
+    rule = BrokenLinkCheckRule({})
+
+    errors = rule.apply(doc)
+    assert len(errors) == 1
+    assert "Broken anchor link" in errors[0].message
+
+
+def test_broken_link_rule_valid_anchor(tmp_path):
+    content = "# Intro\n\nSee [here](#intro)\n"
+    path = tmp_path / "doc.md"
+    path.write_text(content, encoding="utf-8")
+
+    doc = MarkdownParser().parse(path)
+    rule = BrokenLinkCheckRule({})
+
+    errors = rule.apply(doc)
+    assert len(errors) == 0
+
+
+def test_broken_link_rule_detects_missing_file(tmp_path):
+    content = "See [docs](missing/file.md)\n"
+    path = tmp_path / "doc.md"
+    path.write_text(content, encoding="utf-8")
+
+    doc = MarkdownParser().parse(path)
+    rule = BrokenLinkCheckRule({})
+
+    errors = rule.apply(doc)
+    assert len(errors) == 1
+    assert "Broken file link" in errors[0].message
+
+
+def test_broken_link_rule_external(monkeypatch, tmp_path):
+    content = "Visit [site](https://example.com/broken)\n"
+    path = tmp_path / "doc.md"
+    path.write_text(content, encoding="utf-8")
+    doc = MarkdownParser().parse(path)
+
+    rule = BrokenLinkCheckRule({"check_external": True})
+
+    def fake_head(url, allow_redirects=True, timeout=3.0):
+        raise requests.RequestException("network error")
+
+    monkeypatch.setattr("fds_dev.rules.requests.head", fake_head)
+    monkeypatch.setattr("fds_dev.rules.requests.get", fake_head)
+
+    errors = rule.apply(doc)
+    assert len(errors) == 1
+    assert "Broken external link" in errors[0].message

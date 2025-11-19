@@ -9,11 +9,19 @@ class Header:
     line_number: int
 
 @dataclass
+class Link:
+    text: str
+    target: str
+    line_number: int
+    kind: str
+
+@dataclass
 class Document:
     path: str
     content: str
     lines: List[str] = field(init=False)
     headers: List[Header] = field(default_factory=list)
+    links: List[Link] = field(default_factory=list)
 
     def __post_init__(self):
         self.lines = self.content.splitlines()
@@ -25,8 +33,8 @@ class MarkdownParser:
     A simple parser to extract structural elements from a Markdown file.
     """
     def __init__(self):
-        # Regex to find ATX-style headers (#, ##, etc.)
         self.header_regex = re.compile(r"^\s*(#{1,6})\s+(.*)")
+        self.link_regex = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 
     def parse(self, file_path: str) -> Document:
         """
@@ -43,8 +51,29 @@ class MarkdownParser:
                 level = len(header_match.group(1))
                 text = header_match.group(2).strip()
                 doc.headers.append(Header(level=level, text=text, line_number=i + 1))
+
+        doc.links = self._extract_links(doc.lines)
         
         return doc
+
+    def _extract_links(self, lines: List[str]) -> List[Link]:
+        links: List[Link] = []
+        for line_number, line in enumerate(lines, start=1):
+            for match in self.link_regex.finditer(line):
+                text = match.group(1).strip()
+                target = match.group(2).strip()
+                kind = self._classify_link(target)
+                links.append(Link(text=text, target=target, line_number=line_number, kind=kind))
+        return links
+
+    @staticmethod
+    def _classify_link(target: str) -> str:
+        lowered = target.lower()
+        if lowered.startswith(("http://", "https://", "mailto:")):
+            return "external"
+        if lowered.startswith("#"):
+            return "anchor"
+        return "file"
 
 if __name__ == '__main__':
     # Example usage:

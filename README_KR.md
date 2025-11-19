@@ -70,6 +70,7 @@ FDS-Dev는 두 가지 도구를 하나로 결합했습니다:
 ## 핵심 기능
 
 - **구조 인식 린팅:** 단순한 스타일 검사를 넘어섭니다. 섹션 순서 강제, 특정 헤더 요구, 문서 전체 구조 검증.
+- **링크 무결성 검사:** `broken-link-check` 규칙을 켜면 누락된 앵커, 존재하지 않는 파일, 접근 불가한 URL을 사전에 감지할 수 있습니다.
 - **자동 번역:** 한국어, 중국어, 일본어 등의 Markdown 파일과 소스 코드 주석을 영어로 번역합니다.
 - **간편한 설정:** 단일 `.fdsrc.yaml` 파일로 모든 것을 제어합니다.
 - **속도 최적화:** 최대 성능을 위해 설계된 핵심 컴포넌트.
@@ -102,6 +103,14 @@ fds translate README.ko.md --output README.md
 # 소스 코드 파일의 주석을 제자리에서 번역
 fds translate my_app/main.py --in-place
 ```
+
+## CLI 명령어
+
+- `fds lint <path>`: `.fdsrc.yaml`에 정의된 구조 린팅 규칙(옵션으로 `broken-link-check` 포함)을 실행합니다.
+- `fds translate <path> [--output OUTPUT | --in-place]`: Markdown/소스 파일을 영어로 번역하면서 코드 블록과 식별자를 유지합니다.
+- `fds lint --help` / `fds translate --help`: 사용 가능한 모든 옵션을 확인할 수 있습니다.
+
+링크 검사는 `.fdsrc.yaml` 설정만으로 제어되며, 규칙을 켜면 `fds lint` 결과에 깨진 링크도 일반 린트 오류처럼 보고됩니다.
 
 ## 번역 제공자
 

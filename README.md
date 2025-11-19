@@ -70,6 +70,7 @@ Traditional linters (markdownlint, Vale) only validate formatting, and conventio
 ## Core Features
 
 - **Structure-Aware Linting:** Go beyond simple style checks. Enforce section order, require specific headers, and validate the overall structure of your documents.
+- **Broken Link Audits:** Optionally enable the `broken-link-check` rule to flag missing anchors, absent files, or unreachable URLs before publishing.
 - **Automated Translation:** Translate Markdown files and source code comments from languages like Korean, Chinese, Japanese, and more into English.
 - **Simple Configuration:** A single `.fdsrc.yaml` file to control everything.
 - **Built for Speed:** Core components written for maximum performance.
@@ -102,6 +103,14 @@ fds translate README.ko.md --output README.md
 # Translate a source code file's comments in-place
 fds translate my_app/main.py --in-place
 ```
+
+## CLI Commands
+
+- `fds lint <path>`: Runs the structure-aware lint checks configured in `.fdsrc.yaml`, including optional rules such as `broken-link-check`.
+- `fds translate <path> [--output OUTPUT | --in-place]`: Converts Markdown or source files to English, preserving code blocks and identifiers.
+- `fds translate --help` / `fds lint --help`: Show detailed usage and supported flags.
+
+Broken link validation is controlled entirely via `.fdsrc.yaml`; once the rule is enabled, `fds lint` will report missing anchors, absent files, or unreachable URLs just like any other lint error.
 
 ## Translation Providers
 
@@ -220,15 +229,11 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-## Acknowledgments
+## About Flamehaven × FDS-Dev
 
-FDS-Dev is built with:
-- **py-googletrans** - Free Google Translate API
-- **DeepL API** - High-quality translation backend
-- **click** - Beautiful CLI framework
-- **pytest** - Testing framework
+**English**: FDS-Dev is Flamehaven’s code-level internationalization platform that lets non-English-speaking developers lint, translate, and publish documentation without breaking code structure. We guard identifiers, score translations with an Omega tensor, and ship blazing-fast structural linting so every README feels professional. Stars, issues, and pull requests directly shape the future of multilingual development workflows—join us to expand global open source collaboration.
 
-Special thanks to all contributors and the open-source community!
+**한국어**: FDS-Dev는 Flamehaven이 만든 코드 레벨 국제화 플랫폼으로, 영어가 익숙하지 않은 개발자가 문서 구조를 지키면서 번역하고 린트하도록 돕습니다. 기술 용어를 보존하고 Omega 품질 점수로 번역을 검증하며, 초고속 구조 린팅으로 모든 README가 전문성을 갖추도록 이끕니다. 여러분의 Star, Issue, PR 하나하나가 다국어 개발 워크플로를 완성하는 여정에 직접적인 힘이 됩니다. 함께 글로벌 오픈소스 생태계를 넓혀 주세요.
 
 ---
 
