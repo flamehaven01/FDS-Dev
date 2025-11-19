@@ -1,0 +1,28 @@
+# FDS-Dev Configuration File
+
+# Language settings for the translation engine
+language:
+  # The source language of your documentation and comments.
+  # 'auto' for automatic detection.
+  # Supported codes: ko, ja, zh, es, fr, de, ru, etc.
+  source: 'ko'
+  
+  # The target language for translation.
+  target: 'en'
+
+# Linting rules for document structure and style.
+# You can extend a recommended ruleset and override specific rules.
+extends: 'fds:recommended'
+
+rules:
+  # Example: Ensure a 'License' section exists in the README.
+  require-section-license: on
+  
+  # Example: Enforce a specific order for top-level sections.
+  section-order:
+    order:
+      - 'About The Project'
+      - 'Getting Started'
+      - 'Usage'
+      - 'Contributing'
+      - 'License'
