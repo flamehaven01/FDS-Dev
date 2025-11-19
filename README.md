@@ -14,7 +14,7 @@
 
 <h3 align="center">A blazingly fast, structure-aware linter for your documentation, supercharged with AI-powered translation.</h3>
 
-Built for the global developer community. Write documentation and code comments in your native language, and let FDS-Dev instantly translate it to production-ready English.
+<h3 align="center">Built for the global developer community. Write documentation and code comments in your native language, and let FDS-Dev instantly translate it to production-ready English.</h3>
 
 [Features](#core-features) • [Quick Start](#quick-start) • [Documentation](docs/) • [Contributing](#contributing) • [Support](#support)
 
