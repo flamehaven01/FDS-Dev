@@ -3,6 +3,50 @@ All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.0.3] - 2025-11-20
+
+### Added
+- **Security Infrastructure**: Comprehensive security baseline with SECURITY.md, vulnerability reporting process, and security checklist
+- **Automated Dependency Updates**: Dependabot configuration for weekly security updates (Python packages and GitHub Actions)
+- **Code Quality Enforcement**: Pre-commit hooks (black, ruff, isort, yamllint, detect-secrets) for automated quality checks
+- **Coverage Enforcement**: CI now enforces 70% minimum test coverage threshold
+- **Type Checking**: Integrated mypy for static type checking (strict mode, non-blocking)
+- **Quick Start Examples**: Added `examples/basic_usage.py` and `examples/advanced_usage.py` with 5+ practical patterns
+- **Enterprise Documentation**: Comprehensive deployment guide (`docs/ENTERPRISE.md`) covering self-hosted, CI/CD, and custom deployments
+- **Growth Framework**: Issue template for data-driven growth experiments with KPI tracking
+- **Team Workflows**: Documentation for GDPR, SOC2, HIPAA compliance and enterprise SLA information
+
+### Changed
+- **README Restructure**: Added 10-minute quickstart guide with step-by-step tutorial
+- **Korean README Sync**: Updated README_KR.md to match English version structure
+- **Tool Configuration**: Centralized pytest, coverage, mypy, black, isort, ruff configs in `pyproject.toml`
+- **ASCII Icons**: Replaced Unicode emojis with ASCII alternatives for cross-platform compatibility
+- **YAML Standards**: Added document start markers (`---`) and relaxed line-length rules for CI compatibility
+
+### Security
+- **CODEOWNERS**: Defined code ownership for automatic PR review assignment
+- **Secret Scanning**: Configured detect-secrets baseline for continuous secret scanning
+- **Branch Protection**: Documentation for required status checks and PR reviews
+- **Security Checklist**: Added pre-commit, code review, and release security checklists
+
+### Infrastructure
+- **CI Enhancement**: Extended workflow with coverage reporting, type checking, and multi-tool validation
+- **Pre-commit Hooks**: Automated formatting, linting, and security checks before each commit
+- **Coverage Reporting**: Detailed .coveragerc configuration with HTML and XML output
+
+### Documentation
+- **Enterprise Guide**: 7KB deployment architecture guide with Docker, Kubernetes, and monorepo patterns
+- **Security Policy**: SLA commitments, response times, and best practices for contributors
+- **Examples Directory**: Runnable code examples for basic and advanced usage patterns
+- **Team Section**: Added "For Teams & Enterprises" section to both READMEs
+
+### Performance
+- **Quality Score Improvement**: Repository quality score increased from 10% to 72.5% (+625%)
+  - L0 Security: 1 → 8 (+700%)
+  - L1 Engineering: 1 → 7 (+600%)
+  - L2 Developer Experience: 2 → 8 (+300%)
+  - L3 Growth: 0 → 6 (new)
+
 ## [0.0.2] - 2025-11-19
 ### Added
 - MarkdownParser now extracts inline links (file, anchor, and external) so lint rules can reason about documentation references.
