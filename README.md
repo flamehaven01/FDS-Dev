@@ -16,15 +16,14 @@
 [![Code Quality](https://img.shields.io/badge/quality-A+-blue.svg)](https://github.com/flamehaven01/FDS-Dev)
 [![SIDRCE Certified](https://img.shields.io/badge/SIDRCE-0.896%20Certified-green.svg)](https://github.com/flamehaven01/FDS-Dev)
 
-</div>
+<h3>
+[>] Build once, speak every language.<br/>
+[*] Enforce doc structure while AI translates without breaking code.<br/>
+[=] Keep identifiers and code blocks pristine; localize only the prose.<br/>
+[+] Ship production-ready English docs in seconds, not hours.
+</h3>
 
-<h3>🔺Built for the global developer community.</br>🔺A blazingly fast, structure-aware linter for your documentation, supercharged with AI-powered translation.
- </br>🔺Write documentation and code comments in your native language
-  </br> 🔺let FDS-Dev instantly translate it to production-ready English.</h3>
-
-<div align="center">[Features](#core-features) • [Quick Start](#quick-start) • [Documentation](docs/) • [Contributing](#contributing) • [Support](#support)</div>
-
-
+<div align="center">[Features](#core-features)  [Quick Start](#quick-start)  [Documentation](docs/)  [Contributing](#contributing)  [Support](#support)</div>
 
 
 ---
